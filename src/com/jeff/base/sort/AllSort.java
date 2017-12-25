@@ -160,24 +160,6 @@ public class AllSort {
     }
 
 
-    private void insert(int[] array) {
-        for (int i = 1; i < array.length; i++) {
-            int j;
-            for (j = i - 1; j >= 0; j--) {
-                if (array[j] < array[i])
-                    break;
-            }
-            if (j != i - 1) {
-                int tmp = array[i];
-                for (int k = i - 1; k > j; k--) {
-                    array[k + 1] = array[k];
-                }
-                array[j + 1] = tmp;
-            }
-        }
-        System.out.println(Arrays.toString(array));
-    }
-
     /**
      * 希尔排序
      *
@@ -208,5 +190,17 @@ public class AllSort {
                 array[m + gap] = tmp;
             }
         }
+    }
+
+    private void heapSort(int[] array) {
+        int length = array.length;
+        for (int i = length / 2 - 1; i >= 0; i--) {
+            heapSort(array,i,length-1);
+
+        }
+    }
+
+    private void heapSort(int[] array, int start, int end) {
+
     }
 }
