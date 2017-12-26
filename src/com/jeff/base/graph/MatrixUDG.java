@@ -1,7 +1,5 @@
 package com.jeff.base.graph;
 
-import java.util.Arrays;
-
 /**
  * 1.构建矩阵
  * 2.深度搜索
@@ -311,9 +309,9 @@ public class MatrixUDG {
             //找出最小值
             int k = 0, min = INF;
             for (int j = 0; j < mVexs.length; j++) {
-                if (!flag[j] && mMatrix[vs][j] < min) {
-                    k = i;
-                    min = mMatrix[vs][j];
+                if (!flag[j] && dist[j] < min) {
+                    k = j;
+                    min = dist[j];
                 }
             }
             //更新flag标记

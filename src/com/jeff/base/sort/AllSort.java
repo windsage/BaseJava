@@ -195,6 +195,7 @@ public class AllSort {
         }
     }
 
+<<<<<<< HEAD
 
     private void heapSort(int[] array) {
         for (int i = array.length / 2 - 1; i >= 0; i--) {
@@ -332,4 +333,17 @@ public class AllSort {
     }
 
 
+=======
+    private void heapSort(int[] array) {
+        int length = array.length;
+        for (int i = length / 2 - 1; i >= 0; i--) {
+            heapSort(array,i,length-1);
+
+        }
+    }
+
+    private void heapSort(int[] array, int start, int end) {
+
+    }
+>>>>>>> 05839ac61026cc03ff7951f51162637e7c27f455
 }
