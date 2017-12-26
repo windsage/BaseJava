@@ -27,6 +27,9 @@ public class AllSort {
         sort.bucketSort(SORT_ARRAY);
         sort.quickSort(SORT_ARRAY);
         sort.shellSort(SORT_ARRAY);
+        sort.heapSort(SORT_ARRAY);
+        sort.radixSort(SORT_ARRAY);
+        sort.mergeSort(SORT_ARRAY);
     }
 
 
@@ -160,24 +163,6 @@ public class AllSort {
     }
 
 
-    private void insert(int[] array) {
-        for (int i = 1; i < array.length; i++) {
-            int j;
-            for (j = i - 1; j >= 0; j--) {
-                if (array[j] < array[i])
-                    break;
-            }
-            if (j != i - 1) {
-                int tmp = array[i];
-                for (int k = i - 1; k > j; k--) {
-                    array[k + 1] = array[k];
-                }
-                array[j + 1] = tmp;
-            }
-        }
-        System.out.println(Arrays.toString(array));
-    }
-
     /**
      * 希尔排序
      *
@@ -190,7 +175,7 @@ public class AllSort {
                 shellGroupSort(array, i, gap);
             }
         }
-        System.out.println(Arrays.toString(array));
+        System.out.println("Shell排序后的顺序是：" + Arrays.toString(array));
     }
 
     private void shellGroupSort(int[] array, int i, int gap) {
@@ -209,4 +194,142 @@ public class AllSort {
             }
         }
     }
+
+
+    private void heapSort(int[] array) {
+        for (int i = array.length / 2 - 1; i >= 0; i--) {
+            maxHeapSort(array, i, array.length - 1);
+        }
+        for (int i = array.length - 1; i > 0; i--) {
+            int tmp = array[0];
+            array[0] = array[i];
+            array[i] = tmp;
+            maxHeapSort(array, 0, i - 1);
+        }
+        System.out.println("Heap排序后的顺序是：" + Arrays.toString(array));
+    }
+
+
+    private void maxHeapSort(int[] array, int start, int end) {
+        int c = start, l = 2 * c + 1, tmp = array[start];
+        for (; l <= end; c = l, l = 2 * l + 1) {
+            if (l < end && array[l] < array[l + 1])
+                l++;
+            if (tmp >= array[l])
+                break;
+            else {
+                array[c] = array[l];
+                array[l] = tmp;
+            }
+        }
+    }
+
+
+    private void radixSort(int[] array) {
+        int max = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (max < array[i])
+                max = array[i];
+        }
+        for (int exp = 1; max / exp > 0; exp *= 10) {
+            countSort(array, exp);
+
+        }
+        System.out.println("基数排序后的顺序是：" + Arrays.toString(array));
+    }
+
+    private void countSort(int[] array, int exp) {
+        int[] buckets = new int[10];
+        int[] output = new int[array.length];
+        for (int i = 0; i < array.length; i++) {
+            buckets[(array[i] / exp) % 10]++;
+        }
+        for (int i = 1; i < buckets.length; i++) {
+            buckets[i] += buckets[i - 1];
+        }
+        //栈的一种思想，后入先出
+        for (int i = array.length - 1; i >= 0; i--) {
+            //array[i]在桶中的索引
+            int index = (array[i] / exp) % 10;
+            output[buckets[index] - 1] = array[i];
+            buckets[index]--;
+        }
+        for (int i = 0; i < output.length; i++) {
+            array[i] = output[i];
+        }
+    }
+
+
+    /**
+     * @param array
+     */
+    private void mergeSort(int[] array) {
+        mergeUp2Down(array, 0, array.length - 1);
+        System.out.println(Arrays.toString(array));
+    }
+
+    /**
+     * 自上而下归并
+     *
+     * @param array
+     * @param start
+     * @param end
+     */
+    private void mergeUp2Down(int[] array, int start, int end) {
+        if (start >= end)
+            return;
+        int mid = (start + end) / 2;
+        mergeUp2Down(array, start, mid);
+        mergeUp2Down(array, mid + 1, end);
+        merge(array, start, mid, end);
+
+    }
+
+    private void merge(int[] array, int start, int mid, int end) {
+        int[] tmp = new int[end - start + 1];
+        int i = start;
+        int j = mid + 1;
+        int k = 0;
+        while (i <= mid && j <= end) {
+            if (array[i] < array[j]) {
+                tmp[k++] = array[i++];
+            } else
+                tmp[k++] = array[j++];
+        }
+        //如果出现start到mid和mid+1到end的长度不等的情况下就要走到这里了~
+        while (i <= mid) {
+            tmp[k++] = array[i++];
+        }
+        while (j <= end) {
+            tmp[k++] = array[j++];
+        }
+        for (int l = 0; l < tmp.length; l++) {
+            array[start + l] = tmp[l];
+        }
+
+    }
+
+
+    private void mergeDown2Up(int[] array) {
+        for (int i = 1; i < array.length; i = 2 * i) {
+            mergeGroup(array, array.length, i);
+        }
+    }
+
+    /**
+     * @param array
+     * @param length
+     * @param gap    子数组的长度
+     */
+    private void mergeGroup(int[] array, int length, int gap) {
+        int i = 0, twolen = 2 * gap;
+        for (; i + twolen - 1 < length; i = twolen + i) {
+            merge(array, i, i + gap - 1, i + 2 * gap - 1);
+        }
+        if (i + gap - 1 < length - 1) {
+            merge(array, i, i + gap - 1, length - 1);
+        }
+    }
+
+
 }
