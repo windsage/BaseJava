@@ -28,7 +28,7 @@ public class Main {
         Subject subject = (Subject) Proxy.newProxyInstance(loader, interfaces, handler);
 
         System.out.println("动态代理对象的类型："+subject.getClass().getName());
-
+	//add by xuchao test git commmand
         String hello = subject.sayHello(" Jeff");
         System.out.println(hello);
     }
